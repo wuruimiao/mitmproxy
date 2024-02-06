@@ -16,6 +16,9 @@ if TYPE_CHECKING:
 
 
 class Hook:
+    """
+    
+    """
     name: ClassVar[str]
 
     def args(self) -> list[Any]:

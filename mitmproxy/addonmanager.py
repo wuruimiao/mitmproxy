@@ -164,6 +164,7 @@ class AddonManager:
         If the calling addon is already running, it should follow with
         running and configure events. Must be called within a current
         context.
+        类名小写为key, addone为value, 存放在lookup里
         """
         api_changes = {
             # mitmproxy 6 -> mitmproxy 7
