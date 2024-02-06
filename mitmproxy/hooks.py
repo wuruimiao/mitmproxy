@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class Hook:
     """
-    
+    两个作用：name用来找addon函数，args作为函数参数
     """
     name: ClassVar[str]
 
@@ -35,9 +35,13 @@ class Hook:
         return super().__new__(cls)
 
     def __init_subclass__(cls, **kwargs):
+        """
+        修改子类名，去掉Hook，驼峰转_
+        """
         # initialize .name attribute. HttpRequestHook -> http_request
         if cls.__dict__.get("name", None) is None:
             name = cls.__name__.replace("Hook", "")
+            # 驼峰转_
             cls.name = re.sub("(?!^)([A-Z]+)", r"_\1", name).lower()
         if cls.name in all_hooks:
             other = all_hooks[cls.name]

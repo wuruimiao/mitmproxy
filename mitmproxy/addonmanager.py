@@ -62,6 +62,7 @@ def safecall():
 class Loader:
     """
     A loader object is passed to the load() event when addons start up.
+    可增加option、command
     """
 
     def __init__(self, master):
@@ -83,6 +84,7 @@ class Loader:
         it will be generated and added by tools as needed.
         """
         assert not isinstance(choices, str)
+        # 检测同名option
         if name in self.master.options:
             existing = self.master.options._options[name]
             same_signature = (
@@ -175,6 +177,7 @@ class AddonManager:
             # mitmproxy 8 -> mitmproxy 9
             "add_log": "The add_log event has been deprecated, use Python's builtin logging module instead",
         }
+        # 检测api变化
         for a in traverse([addon]):
             for old, msg in api_changes.items():
                 if hasattr(a, old):
@@ -187,6 +190,7 @@ class AddonManager:
                     "An addon called '%s' already exists." % name
                 )
         loader = Loader(self.master)
+        # 遍历addon及其子，调用addon.load(loader)
         self.invoke_addon_sync(addon, LoadHook(loader))
         for a in traverse([addon]):
             name = _get_name(a)
@@ -244,6 +248,7 @@ class AddonManager:
     def _iter_hooks(self, addon, event: hooks.Hook):
         """
         Enumerate all hook callables belonging to the given addon
+        遍历addon与其子，获取addon的event.name同名函数，返回(addon, func)
         """
         assert isinstance(event, hooks.Hook)
         for a in traverse([addon]):

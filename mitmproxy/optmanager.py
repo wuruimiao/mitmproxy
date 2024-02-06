@@ -112,8 +112,10 @@ class OptManager:
     def __init__(self) -> None:
         self.deferred: dict[str, Any] = {}
         self.changed = signals.SyncSignal(_sig_changed_spec)
+        # 猜测是类似信号机制，send时触发，调用_subscriptions里的func(updated)
         self.changed.connect(self._notify_subscribers)
         self.errored = signals.SyncSignal(_sig_errored_spec)
+        # 貌似只有涉及UI才会subscribe？
         self._subscriptions: list[tuple[weakref.ref[Callable], set[str]]] = []
         # Options must be the last attribute here - after that, we raise an
         # error for attribute assignment to unknown options.
