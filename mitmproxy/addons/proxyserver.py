@@ -52,6 +52,9 @@ class Servers:
         return self._lock.locked()
 
     async def update(self, modes: Iterable[mode_specs.ProxyMode]) -> bool:
+        """
+        proxy server选项默认开启，根据mode找单例ServerInstance，并启动.start()
+        """
         all_ok = True
 
         async with self._lock:
